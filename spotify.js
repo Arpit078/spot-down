@@ -1,8 +1,25 @@
-const axios  = require("axios")
-require("dotenv").config()
+import axios  from "axios"
+import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+dotenv.config()
 
 
-async function spotifyTracks(playlistId,spotifyToken){
+export async function refreshToken(clientSecret,clientId){
+  const authString = `${clientId}:${clientSecret}`;
+  const base64AuthString = Buffer.from(authString).toString('base64');
+  const headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Authorization': `Basic ${base64AuthString}`
+  };
+  const data = 'grant_type=client_credentials';
+  const token = axios.post('https://accounts.spotify.com/api/token', data, { headers })
+  .then(async (response)=> {
+    return response.data.access_token
+  })
+  return token
+
+}
+
+export async function spotifyTracks(playlistId,spotifyToken){
 
       let spotifyUrl = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
       const arr = axios.get(spotifyUrl, { headers: 
@@ -22,8 +39,11 @@ async function spotifyTracks(playlistId,spotifyToken){
 
 
 }
-// spotifyTracks("1qpDYY8t6WcPPNlJVtSZXx","BQAFo2t75h4Nq41Iw6759p-adJ9Gy2f2WEKz4wLZyCAZVhpLl8TxCU3gVii6avrnJ2ju19cey4vbSBc7cZBDC-LwKx6E3bvOsZISj6lYKzzxYD4yuKeV-P8dRhkgdbJLu_SpzN3sV4DwGwr3w6o8cq5ln-bAsbmOl16amsclzClcQWqOiqd98YgbfxvVB2oJh40s")
-// .then((res)=>{console.log(res)})
 
-module.exports = {spotifyTracks};
+
+
+// const token  =  await refreshToken("0826f6269a6542a3bd0bf5a6e329263c","dd7930c0a4a14972a2815e0324b9d58b")
+// const arr = await spotifyTracks("6OIyGmoeM9DicKv2eCMUWJ",token)
+// console.log(arr)
+
 

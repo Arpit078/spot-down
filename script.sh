@@ -4,4 +4,4 @@
 MYVAR=$1
 rm -rf ./music.m4a
 # Use the variable
-yt-dlp -f 'bestaudio[ext=m4a]' $MYVAR -o ./music.m4a
+yt-dlp -f 'bestaudio[ext=m4a]' $MYVAR -o ./extracted/$3/$2

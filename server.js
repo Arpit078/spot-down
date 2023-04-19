@@ -1,14 +1,61 @@
-const express = require("express")
+import express from "express"
 const app = express()
-const axios = require('axios');
-const path = require('path');
-const { execSync } = require('child_process');
+import axios from 'axios'
+import path from 'path'
+import { execSync } from 'child_process'
 // const {download} = require("./scrape")
+import {spotifyTracks,refreshToken} from './spotify.js'
+import {download,getSongs} from "./scrape.js"
+import {zip} from "./zip.js"
 app.use(express.json());
-require("dotenv").config()
+import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+dotenv.config()
 
 
-var PORT = process.env.PORT||5000;
+var PORT = process.env.PORT||5001;
+app.get('/:playlistURL&:user', async (req, res) => {
+	try {
+	  const token = await refreshToken(process.env.CLIENT_SECRET, process.env.CLIENT_ID);
+	  await getSongs(req.params.playlistURL, token, process.env.YOUTUBE_API_KEY, req.params.user);
+  
+	  const zipFileName = `${req.params.user}.zip`;
+	  const zipFilePath = `./zips/${zipFileName}`;
+	  await zip(`./extracted/${req.params.user}`, zipFilePath);
+  
+	  const options = {
+		headers: {
+		  'Content-Type': 'application/octet-stream',
+		},
+	  };
+  
+	  res.download(zipFilePath, zipFileName, options, (err) => {
+		if (err) {
+		  console.error(err);
+		} else {
+		  console.log(`File ${zipFilePath} sent successfully.`);
+		}
+		// Delete the ZIP file after sending it
+		fs.unlinkSync(zipFilePath);
+	  });
+	} catch (err) {
+	  console.error(err);
+	  res.sendStatus(500);
+	}
+  });
+  
+
+app.listen(PORT, function(err){
+	if (err) console.log(err);
+	console.log("Server listening on PORT", PORT);
+});
+
+
+
+
+
+
+
+
 
 
 app.get('/q=:query', async function(req, res){
@@ -37,13 +84,4 @@ app.get('/q=:query', async function(req, res){
 		});
 	})
 
-});
-
-app.get('/playlistURL=:playslistURL&spotifyToken=:spotifyToken',(req,res)=>{
-	res.json("api working")
-})
-
-app.listen(PORT, function(err){
-	if (err) console.log(err);
-	console.log("Server listening on PORT", PORT);
 });
