@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",
-  "start":"nodemon server.js",
+  "start": "nodemon server.js",
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -19,8 +19,10 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "firebase-admin": "^11.5.0",
+    "fs-extra": "^11.1.1",
     "node-cron": "^3.0.2",
     "nodemon": "^2.0.22",
+    "youtube-search-without-api-key": "^1.0.7",
     "zlib": "^1.0.5"
   }
 }
