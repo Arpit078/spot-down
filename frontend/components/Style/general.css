@@ -1,0 +1,104 @@
+body{
+  margin:0;
+}
+.text{
+  font-family: 'Rubik', sans-serif;
+  margin: 8px;
+  padding: 35px 40px 35px 40px;
+}
+
+@media only screen and (min-width: 600px) {
+  .text{
+    padding:35px 40px 35px 100px;
+  }
+}
+.title{
+  font-weight: 600;
+  font-size: 3.2rem;
+}
+.subHead{
+  font-weight: 500;
+  font-size: 2.1rem;
+}
+.paragraph{
+  max-width: 40em;
+  font-size: 1.2rem;
+  font-weight: 300;
+  line-height: 1.4;
+  color: black!important;
+}
+.highlight{
+  max-width: 40em;
+  font-size: 1.2rem;
+  font-weight: 300;
+  line-height: 1.4;
+  color: rgb(156, 57, 57,0.8);
+
+}
+p{
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+
+a {
+  position: relative;
+  color: #000;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #000;
+}
+
+a::before {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 1.6rem;
+  bottom: -4px;
+  left: 0;
+  background-color: rgba(79, 90, 192, 0.5);
+  transform: scaleY(0.3) translateY(1.6rem);
+  transition: transform 0.3s ease;
+}
+
+a:hover::before {
+  transform: scaleY(1);
+}
+.code_block{
+  background-color: black;
+  font-family: 'Source Code Pro', monospace;
+  color: wheat;
+  width: max-content;
+  border-radius: 6px;
+  padding: 1rem;
+  filter: drop-shadow(3px 1px 4px #484849);
+  border-radius: 5px;
+}
+.counter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+ }
+ 
+.counter button{
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+}
+/* ----------------------------------------------- */
+
+.background {
+  background: linear-gradient(to bottom, rgb(58, 58, 58), black);
+  /* Additional styles */
+  height: 100vh; /* Example height */
+  width: 100%; /* Example width */
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+}
