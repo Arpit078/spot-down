@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "@arpit078/preactjs": "^1.6.0",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon -e js,json,html,css --watch '*' server.js",
+    "start": "node server.js"
+  }
+}

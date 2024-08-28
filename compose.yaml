@@ -1,0 +1,7 @@
+include:
+   - infra.yaml
+services:
+  api:
+    build: ./api/
+    ports:
+      - "5001:5001"
