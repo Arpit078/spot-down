@@ -1,15 +1,15 @@
 import pg from 'pg';
-import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
-dotenv.config()
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 const { Client } = pg;
 
-
 const config = {
-    host: 'host.docker.internal', 
-    port: 5432, 
-    database: 'spot_down',
-    user: 'postgres',
-    password: (process.env.POSTGRES_PASSWORD).toString(),
+    host: process.env.PGHOST || 'postgres',  // Ensure this points to 'postgres'
+    port: process.env.PGPORT || 5432,
+    database: process.env.PGDATABASE || 'spotdowndb',  // Ensure the database name matches your docker-compose.yaml
+    user: process.env.PGUSER || 'postgres',
+    password: process.env.PGPASSWORD || 'spot-down-db-password',
 };
 
 const postgres_client = new Client(config);

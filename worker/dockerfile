@@ -1,21 +1,30 @@
 FROM ubuntu:latest
+
 FROM node:18.19.1
+
 USER root
+
 WORKDIR /app
+
 RUN apt-get update 
 
-RUN apt-get -y install curl gnupg python3 python3-pip ffmpeg
+RUN apt-get -y install curl gnupg python3 python3-pip ffmpeg cron
 
 RUN curl -L -o yt-dlp https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
+
 RUN chmod +x yt-dlp
 RUN mv yt-dlp /usr/local/bin/yt-dlp
-
 
 COPY . .
 
 RUN npm install
 
+ENV PORT 5002
 EXPOSE 5002
 
+RUN echo "* * * * * node /app/download_queue.js >> /var/log/cron.log 2>&1" > /etc/cron.d/download_queue
 
-CMD ["npm" , "start"]
+RUN chmod 0644 /etc/cron.d/download_queue
+RUN crontab /etc/cron.d/download_queue
+
+CMD cron && npm start

@@ -28,7 +28,7 @@ amqp.connect('amqp://localhost', (err, connection) => {
       throw err;
     }
 
-    const queue = 'dead-letter-download-queue'; 
+    const queue = 'download_queue'; 
     channel.assertQueue(queue, {
       durable: false
     });
@@ -41,9 +41,6 @@ amqp.connect('amqp://localhost', (err, connection) => {
         const success = await doPostRequest(JSON.parse(msg.content.toString())); // Perform POST request
         if (success) {
           channel.ack(msg); // Acknowledge the receipt of the message only if POST was successful
-        }
-        else{
-          channel.sendToQueue('dead-letter-download-queue', Buffer.from(JSON.stringify(msg.content.toString())));
         }
       }
     });
