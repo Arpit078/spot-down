@@ -26,8 +26,11 @@ app.get('/api/search', async (req, res) => {
 app.get('/api/queryPlaylist', async (req, res) => {
 	try {
       let playlistId = req.body.playlistUrl.match(/playlist\/(.*?)\?/)[1];
+      console.log(playlistId)
       let token = await getSpotifyToken(redis_client);
-	  let data = await getPlaylistTracks(playlistId,token);
+      console.log(`got token ${token}`)
+      let data = await getPlaylistTracks(playlistId,token);
+      console.log("data",data)
       res.status(200).send(data)
 	} catch (err) {
 	  console.error(err);

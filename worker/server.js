@@ -6,6 +6,8 @@ import fs from 'fs';
 import path from 'path'; 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import cron from 'node-cron';  // Import node-cron
+import { message_cron } from './download_queue.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -16,6 +18,13 @@ app.use(express.urlencoded({ extended: true }));
 
 var PORT = process.env.PORT || 5002;
 
+// Schedule the message_cron function to run every minute
+cron.schedule('* * * * *', () => {
+  console.log('Running message_cron every minute');
+  message_cron();
+});
+
+
 app.post('/worker/server_download', async (req, res) => {
   try {
     let message = req.body.message;
@@ -25,11 +34,6 @@ app.post('/worker/server_download', async (req, res) => {
     let trackImage = message.imageUrl;
     let query = trackName + " by " + trackArtist;
     await getSongs(query, trackId, trackName, trackArtist, trackImage);
-
-    // await postgres_client.query(
-    //   'INSERT INTO songs (track_id, track_name, track_artist, track_cover) VALUES ($1, $2, $3, $4)',
-    //   [trackId, trackName, trackArtist, trackImage]
-    // );
 
     res.status(200).send({ success: true });
   } catch (err) {
