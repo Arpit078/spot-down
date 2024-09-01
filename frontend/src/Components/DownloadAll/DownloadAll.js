@@ -77,7 +77,6 @@ function DownloadPlaylist({ isSong, songs }) {
           isAllDownloaded = true;
         }
         else{
-          setButtonText('Loading...');
           isAllDownloaded = false;
         }
       }
