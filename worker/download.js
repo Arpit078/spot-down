@@ -24,7 +24,9 @@ export async function download(url, trackId, trackName, trackArtist, trackImage)
     });
   });
 }
-export async function getSongs(queryObj, trackId,trackName,trackArtist,trackImage,postgres_client) {
+export async function getSongs(queryObj, trackId,trackName,trackArtist,trackImage,postgres_client, redis_client) {
+  await redis_client.set(trackId,2)
+  await redis_client.expire(trackId, 600)
   const query = `${queryObj} official lyrics`
   const videos = await yt.search(query);
   console.log(videos[0].url)
@@ -42,6 +44,7 @@ export async function getSongs(queryObj, trackId,trackName,trackArtist,trackImag
       INSERT INTO songs (track_id) VALUES ($1)
       ON CONFLICT (track_id) DO NOTHING;
     `, [trackId]);
-
+  await redis_client.set(trackId,1)
+  await redis_client.expire(trackId, 3600)
   }
 }

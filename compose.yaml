@@ -34,7 +34,12 @@ services:
       - rabbitmq
     volumes:
       - ./songs:/app/songs
-
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
   postgres:
     image: postgres:15
     environment:

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import SongsList from '../Components/SongList/SongList.js';
-
+import SearchBar from '../Components/SearchBar/SearchBar.js';
+import DownloadPlaylist from '../Components/DownloadAll/DownloadAll.js';
+import './SearchPage.css'
+import Logo from '../Components/Logo/Logo.js';
 function SongPage() {
   const location = useLocation();
   const { isSong, query } = location.state || {};
@@ -11,7 +14,7 @@ function SongPage() {
     const fetchSongs = async () => {
       const response = await fetch(`http://localhost:5001/api/${isSong ? 'search' : 'queryPlaylist'}?query=${query}`);
       const data = await response.json();
-      // console.log(data)
+      console.log(data)
       setSongs(data)
     };
 
@@ -20,8 +23,13 @@ function SongPage() {
 
   return (
     <div className="app">
-      <h1>{isSong ? 'Songs' : 'Playlists'} for "{query}"</h1>
-      <SongsList songs={songs} />
+      <Logo isSong={isSong} />
+      <div className='search-bar'>
+        <SearchBar isSong={isSong} />
+        <DownloadPlaylist isSong={isSong} songs={isSong ? songs : songs[1]} />
+      </div>
+      <h1>{isSong ? 'Search result for : ' : ''}"{isSong ? query : songs[0]}"</h1>
+      <SongsList songs={isSong ? songs : songs[1]} isSong={isSong} />
     </div>
   );
 }

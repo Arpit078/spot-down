@@ -1,14 +1,7 @@
-.slider-container {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
 .slider {
   position: relative;
-  width: 400px; /* Width of the slider */
-  height: 60px; /* Height of the slider */
+  width: 20rem; /* Width of the slider */
+  height: 2.5rem; /* Height of the slider */
   border-radius: 30px;
   background-color: #ccc; /* Slider background color */
   display: flex;

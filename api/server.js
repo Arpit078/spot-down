@@ -29,14 +29,33 @@ app.get('/api/search', async (req, res) => {
 
 app.get('/api/queryPlaylist', async (req, res) => {
   try {
-      let playlistUrl = req.query.playlistUrl;  // Retrieve playlistUrl from query parameters
-      let playlistId = playlistUrl.match(/playlist\/(.*?)\?/)[1];
-      console.log(playlistId);
-      let token = await getSpotifyToken(redis_client);
-      console.log(`got token ${token}`);
+    let playlistUrl = req.query.query;  // Retrieve playlistUrl from query parameters
+    console.log(playlistUrl);
+    
+    // Updated regex to capture playlist ID even with additional query parameters
+    const regex = /https:\/\/open\.spotify\.com\/playlist\/([a-zA-Z0-9]+)(\?.*)?/;
+    const match = playlistUrl.match(regex);
+    
+    // Error handling for cases where playlistId is not found
+    if (!match) {
+      console.error("Invalid playlist URL format.");
+      return res.status(400).send({ error: "Invalid playlist URL format." });
+    }
+    
+    let playlistId = match[1];
+    console.log(playlistId);
+    
+    try {
+      let token = await getSpotifyToken(redis_client);      
       let data = await getPlaylistTracks(playlistId, token);
-      console.log("data", data);
+      console.log("Data", data);
+      
       res.status(200).send(data);
+    } catch (err) {
+      console.error("Error fetching playlist tracks:", err);
+      res.status(500).send({ error: "Failed to fetch playlist tracks." });
+    }
+    
   } catch (err) {
       console.error(err);
       res.status(err.response?.status || 500).send(err.response?.data || 'An error occurred');

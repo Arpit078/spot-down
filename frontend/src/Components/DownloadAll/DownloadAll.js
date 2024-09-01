@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './SongCard.css';
+import './DownloadAll.css';
 
-function SongCard({ trackName, artistName, imageUrl, songId, isSong }) {
+function DownloadPlaylist({ isSong, songs }) {
   const [buttonText, setButtonText] = useState('Check Status');
   const [loading, setLoading] = useState(false);
   const [statusChecked, setStatusChecked] = useState(false);
@@ -11,18 +11,26 @@ function SongCard({ trackName, artistName, imageUrl, songId, isSong }) {
   const checkStatus = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:5001/api/poll?songId=${songId}`);
-      const data = await response.json();
-      console.log(data.success);
-      setPollStatus(data.success);
-      setStatusChecked(true);
-      if (data.success == 0) {
-        setButtonText('Request');
-      } else if(data.success == 1){
-        setButtonText('Download');
+      let isAllDownloaded = false;
+      for(let i=0;i<songs.length;i++){
+        let songId = songs[i].id;
+        const response = await fetch(`http://localhost:5001/api/poll?songId=${songId}`);
+        const data = await response.json();
+        if (data.success == 0) {
+          setButtonText('Request');
+          isAllDownloaded = false;
+          break;
+        }
+        else if(data.success == 1){
+          isAllDownloaded = true;
+        }
+        else{
+          setButtonText('Loading...');
+          isAllDownloaded = false;
+        }
       }
-      else{
-        setButtonText('Loading...');
+      if(isAllDownloaded){
+        setButtonText('Download');
       }
     } catch (error) {
       console.error('Error fetching song status:', error);
@@ -41,14 +49,7 @@ function SongCard({ trackName, artistName, imageUrl, songId, isSong }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          songs: [
-            {
-              id: songId,
-              trackName: trackName,
-              artistName: artistName,
-              imageUrl: imageUrl,
-            },
-          ],
+          songs : songs
         }),
       });
       const data = await response.json();
@@ -62,10 +63,25 @@ function SongCard({ trackName, artistName, imageUrl, songId, isSong }) {
 
   const pollDownloadStatus = async () => {
     try {
-      const response = await fetch(`http://localhost:5001/api/poll?songId=${songId}`);
-      const data = await response.json();
-      console.log('Polling result:', data.success);
-      if (data.success == 1) {
+      let isAllDownloaded = false;
+      for(let i=0;i<songs.length;i++){
+        let songId = songs[i].id;
+        const response = await fetch(`http://localhost:5001/api/poll?songId=${songId}`);
+        const data = await response.json();
+        if (data.success == 0) {
+          setButtonText('Request');
+          isAllDownloaded = false;
+          break;
+        }
+        else if(data.success == 1){
+          isAllDownloaded = true;
+        }
+        else{
+          setButtonText('Loading...');
+          isAllDownloaded = false;
+        }
+      }
+      if(isAllDownloaded){
         setIsDownloading(false);
         setButtonText('Download');
       }
@@ -77,7 +93,7 @@ function SongCard({ trackName, artistName, imageUrl, songId, isSong }) {
   useEffect(() => {
     let interval;
     if (downloading) {
-      interval = setInterval(pollDownloadStatus, 5000); // Poll every 5 seconds
+      interval = setInterval(pollDownloadStatus, 30); // Poll every 5 seconds
     }
     return () => clearInterval(interval);
   }, [downloading]);
@@ -88,6 +104,10 @@ function SongCard({ trackName, artistName, imageUrl, songId, isSong }) {
     } else if (buttonText === 'Request') {
       startDownload();
     } else if (buttonText === 'Download') {
+      let ids = [];
+      for(let i=0;i<songs.length;i++){
+        ids.push(songs[i].id);
+      }
       // Handle Download logic
       try {
         const response = await fetch('http://localhost:5002/worker/client_download', {
@@ -96,7 +116,7 @@ function SongCard({ trackName, artistName, imageUrl, songId, isSong }) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            listOfIds: [songId],
+            listOfIds: ids,
           }),
         });
     
@@ -118,7 +138,7 @@ function SongCard({ trackName, artistName, imageUrl, songId, isSong }) {
     
         // Fallback to trackName if filename is not found
         if (!filename) {
-          filename = trackName+ '.m4a';
+          filename = 'playlist.zip';
         }
     
         const blob = await response.blob();
@@ -138,17 +158,23 @@ function SongCard({ trackName, artistName, imageUrl, songId, isSong }) {
   };
 
   return (
-    <div className="song-card">
-      <img src={imageUrl} alt={trackName} className="song-image" />
-      <div className="song-info">
-        <h3 className="song-title">{trackName}</h3>
-        <p className="song-artist">{artistName}</p>
-        <button onClick={handleButtonClick} className={`searchbutton ${isSong ? 'song' : 'playlist'}`} disabled={loading}>
-          {downloading ? 'Loading...' : buttonText}
-        </button>
-      </div>
-    </div>
+
+<div className="download-all">
+  <input
+    type="text"
+    // value={query}
+    // onChange={handleChange}
+    placeholder="Download All Songs"
+    className="searchinput"
+    disabled={true}
+
+  />
+  <button onClick={handleButtonClick} disabled={loading} className={`searchbutton ${isSong ? 'song' : 'playlist'}`}>
+     {downloading ? 'Loading...' : buttonText}
+  </button>
+</div>
+  
   );
 }
 
-export default SongCard;
+export default DownloadPlaylist;

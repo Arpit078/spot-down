@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+.logo {
+  text-align: center;
+}
+
+
+/* Default gradient */
+.logo.song h1 {
+    background: linear-gradient(to right, #007bff, #a830e4); /* Gradient from left to right */ 
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 5rem; /* Adjust font size as needed */
+    background-clip: text; /* Standard property for background-clip */
+    -webkit-background-clip: text; /* Vendor prefix for WebKit browsers */
+    -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
+    margin: 0; /* Remove default margin */
+    padding: 10px; /* Add some padding if needed */
+    cursor: pointer;
+}
+
+/* Alternative gradient */
+.logo.playlist h1 {
+  background: linear-gradient(to right, #0aff43, #0f441b); 
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 5rem; /* Adjust font size as needed */
+  background-clip: text; /* Standard property for background-clip */
+  -webkit-background-clip: text; /* Vendor prefix for WebKit browsers */
+  -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
+  margin: 0; /* Remove default margin */
+  padding: 10px; /* Add some padding if needed */
+  cursor: pointer;
+}

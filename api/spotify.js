@@ -33,11 +33,12 @@ export async function getSpotifyToken(redis_client) {
 
 
 export async function getPlaylistTracks(playlistId,spotifyToken){
-      let spotifyUrl = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
-      const arr = axios.get(spotifyUrl, { headers: 
+  // https://api.spotify.com/v1/playlists/{playlist_id}
+      let spotifyUrl = `https://api.spotify.com/v1/playlists/${playlistId}`
+      const obj = axios.get(spotifyUrl, { headers: 
         {"Authorization" : `Bearer ${spotifyToken}`},
       }).then((res)=>{
-          const data = res.data.items
+          const data = res.data.tracks.items
           let array = []
           for(let i=0;i<data.length;i++){
               array.push({
@@ -47,9 +48,10 @@ export async function getPlaylistTracks(playlistId,spotifyToken){
                 "imageUrl":  data[i].track.album.images[0].url
               })
           }
-          return array
+          let playListName = res.data.name
+          return [playListName, array]
       })
-      return arr
+      return obj
 }
 
 

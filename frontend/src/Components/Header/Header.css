@@ -2,13 +2,12 @@
 
 .header {
   text-align: center;
-  margin: 40px;
 }
 
-.title.song{
+.title.song {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    font-size: 100px;
+    font-size: 8rem; /* Default font size */
     background: linear-gradient(to right, #007bff, #8c02d1); /* Gradient from left to right */
     background-clip: text; /* Standard property for background-clip */
     -webkit-background-clip: text; /* Vendor prefix for WebKit browsers */
@@ -16,10 +15,11 @@
     text-align: center; /* Center align the title */
     margin-bottom: 1rem; /* Space below the title */
 }
-.title.playlist{
+
+.title.playlist {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    font-size: 100px;
+    font-size: 8rem; /* Default font size */
     background: linear-gradient(to right, #0aff43, #0f441b); /* Gradient from left to right */
     background-clip: text; /* Standard property for background-clip */
     -webkit-background-clip: text; /* Vendor prefix for WebKit browsers */
@@ -31,7 +31,7 @@
 .description.song {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    font-size: 50px;
+    font-size: 2.5rem; /* Default font size */
     background: linear-gradient(to right, #007bff, #a830e4); /* Gradient from left to right */
     background-clip: text; /* Standard property for background-clip */
     -webkit-background-clip: text; /* Vendor prefix for WebKit browsers */
@@ -43,11 +43,53 @@
 .description.playlist {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    font-size: 50px;
+    font-size: 2.5rem; /* Default font size */
     background: linear-gradient(to right, #0aff43, #0f441b); /* Gradient from left to right */
     background-clip: text; /* Standard property for background-clip */
     -webkit-background-clip: text; /* Vendor prefix for WebKit browsers */
     -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
     text-align: center; /* Center align the title */
     margin-bottom: 1rem; /* Space below the title */
+}
+
+/* Media queries for responsive text size */
+
+@media (max-width: 1200px) {
+  .title.song, .title.playlist {
+    font-size: 6rem; /* Adjusted for medium screens */
+  }
+
+  .description.song, .description.playlist {
+    font-size: 3rem; /* Adjusted for medium screens */
+  }
+}
+
+@media (max-width: 992px) {
+  .title.song, .title.playlist {
+    font-size: 3rem; /* Adjusted for smaller screens */
+  }
+
+  .description.song, .description.playlist {
+    font-size: 1.5rem; /* Adjusted for smaller screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .title.song, .title.playlist {
+    font-size: 2.5rem; /* Adjusted for even smaller screens */
+  }
+
+  .description.song, .description.playlist {
+    font-size: 1.2rem; /* Adjusted for even smaller screens */
+  }
+}
+
+@media (max-width: 576px) {
+  .title.song, .title.playlist {
+    font-size: 2rem; /* Adjusted for very small screens */
+  }
+
+  .description.song, .description.playlist {
+    font-size: 1rem; /* Adjusted for very small screens */
+  }
 }

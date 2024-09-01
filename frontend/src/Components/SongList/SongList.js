@@ -2,7 +2,11 @@ import React from 'react';
 import SongCard from '../SongCard/SongCard.js';
 import './SongList.css'; // Import the CSS file for styling
 
-function SongList({ songs }) {
+function SongList({ songs, isSong}) {
+  if (!Array.isArray(songs)) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <div className="songs-list">
       {songs.map((song) => (
@@ -12,6 +16,7 @@ function SongList({ songs }) {
           artistName={song.artistName}
           imageUrl={song.imageUrl}
           songId={song.id}
+          isSong={isSong}
         />
       ))}
     </div>

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import ToggleSlider from '../Components/ToggleSlider/ToggleSlider.js';
 import SearchBar from '../Components/SearchBar/SearchBar.js';
 import Header from '../Components/Header/Header.js';
+import './Home.css';  
+
 function Home() {
     const [isSong, setIsSong] = useState(true);
 

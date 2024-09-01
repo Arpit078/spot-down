@@ -37,7 +37,7 @@ app.post('/worker/server_download', async (req, res) => {
     let trackArtist = message.artistName;
     let trackImage = message.imageUrl;
     let query = trackName + " by " + trackArtist;
-    await getSongs(query, trackId, trackName, trackArtist, trackImage, postgres_client);
+    await getSongs(query, trackId, trackName, trackArtist, trackImage, postgres_client, redis_client);
 
     res.status(200).send({ success: true });
   } catch (err) {
@@ -83,10 +83,14 @@ app.post('/worker/client_download', async (req, res) => {
         await Promise.all(listOfIds.map(async (id) => {
           let songExists = await poll(id,redis_client,postgres_client)
           if(songExists){
-            let trackPath = `./songs/${id}.m4a`;
-            let title = await getTrackName(trackPath);
-            let destPath = path.join(tempDir, `${title}.m4a`);
-            fs.copyFileSync(trackPath, destPath);
+            try{
+              let trackPath = `./songs/${id}.m4a`;
+              let title = await getTrackName(trackPath);
+              let destPath = path.join(tempDir, `${title}.m4a`);
+              fs.copyFileSync(trackPath, destPath);
+            }catch(err){
+              console.error(err);
+            }
           }
         }));
 

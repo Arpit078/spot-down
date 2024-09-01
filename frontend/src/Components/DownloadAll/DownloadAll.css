@@ -1,0 +1,89 @@
+.download-all{
+  width: 1rem;
+}
+
+.download-all-card-true,
+.download-all-card-false {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px; /* Reduced padding */
+  width: 220px; /* Adjust width to ensure it fits better */
+  margin: 25px auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.download-all-card-true:hover,
+.download-all-card-false:hover {
+  transform: translateY(-5px);
+}
+
+.download-all-text {
+  font-size: 16px; /* Adjust font size if necessary */
+  margin-right: 10px; /* Space between text and button */
+}
+
+.download-all-card-true button,
+.download-all-card-false button {
+  padding: 8px 15px; /* Reduced padding for smaller button */
+  font-size: 14px; /* Adjust font size for button */
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.download-all-card-true button {
+  background-color: #007bff;
+  color: white;
+}
+
+.download-all-card-false button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.download-all-card-true button:hover {
+  background-color: #0056b3;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.download-all-card-false button:hover {
+  background-color: #388e3c;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.download-all-card-true button:disabled,
+.download-all-card-false button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.download-all-card-true button:active,
+.download-all-card-false button:active {
+  transform: scale(0.98);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .download-all-card-true,
+  .download-all-card-false {
+    width: 100%;
+    max-width: 400px; /* Adjust width for smaller screens */
+    padding: 10px;
+    box-sizing: border-box; /* Ensure padding is included in the width */
+  }
+
+  .download-all-text {
+    font-size: 14px; /* Adjust font size if necessary */
+    margin-right: 8px; /* Space between text and button */
+  }
+
+  .download-all-card-true button,
+  .download-all-card-false button {
+    padding: 8px 12px; /* Adjust padding for smaller button */
+    font-size: 14px; /* Adjust font size for button */
+  }
+}
