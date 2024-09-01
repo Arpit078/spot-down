@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+.header {
+  text-align: center;
+  margin: 40px;
+}
+
+.title.song{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 100px;
+    background: linear-gradient(to right, #007bff, #8c02d1); /* Gradient from left to right */
+    background-clip: text; /* Standard property for background-clip */
+    -webkit-background-clip: text; /* Vendor prefix for WebKit browsers */
+    -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
+    text-align: center; /* Center align the title */
+    margin-bottom: 1rem; /* Space below the title */
+}
+.title.playlist{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 100px;
+    background: linear-gradient(to right, #0aff43, #0f441b); /* Gradient from left to right */
+    background-clip: text; /* Standard property for background-clip */
+    -webkit-background-clip: text; /* Vendor prefix for WebKit browsers */
+    -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
+    text-align: center; /* Center align the title */
+    margin-bottom: 1rem; /* Space below the title */
+}
+
+.description.song {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 50px;
+    background: linear-gradient(to right, #007bff, #a830e4); /* Gradient from left to right */
+    background-clip: text; /* Standard property for background-clip */
+    -webkit-background-clip: text; /* Vendor prefix for WebKit browsers */
+    -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
+    text-align: center; /* Center align the title */
+    margin-bottom: 1rem; /* Space below the title */
+}
+
+.description.playlist {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 50px;
+    background: linear-gradient(to right, #0aff43, #0f441b); /* Gradient from left to right */
+    background-clip: text; /* Standard property for background-clip */
+    -webkit-background-clip: text; /* Vendor prefix for WebKit browsers */
+    -webkit-text-fill-color: transparent; /* Make text color transparent to show gradient */
+    text-align: center; /* Center align the title */
+    margin-bottom: 1rem; /* Space below the title */
+}

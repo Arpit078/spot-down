@@ -1,0 +1,43 @@
+.searchbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.searchform {
+  display: flex;
+  width: 100%;
+  max-width: 600px;
+}
+
+.searchinput {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+}
+
+.searchbutton {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.searchbutton.song {
+  background-color: #007bff; /* Blue color for "Search Song" */
+}
+
+.searchbutton.playlist {
+  background-color: #28a745; /* Green color for "Search Playlist" */
+}
+
+.searchbutton:hover {
+  opacity: 0.8; /* Slightly transparent on hover */
+}

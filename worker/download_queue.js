@@ -17,10 +17,15 @@ async function doPostRequest(message) {
   }
 }
 
-export async function message_cron() {
+function connectToRabbitMQ(retries = 5) {
   amqp.connect('amqp://rabbitmq', (err, connection) => {
     if (err) {
-      throw err;
+      console.error('Failed to connect to RabbitMQ, retrying...', retries);
+      if (retries === 0) {
+        throw err;
+      }
+      setTimeout(() => connectToRabbitMQ(retries - 1), 5000); // Retry after 5 seconds
+      return;
     }
 
     connection.createChannel((err, channel) => {
@@ -32,24 +37,19 @@ export async function message_cron() {
       channel.assertQueue(queue, { durable: false });
 
       console.log('Waiting for messages in %s. To exit press CTRL+C', queue);
-
-      let processing = true;
+      let processing = false;
 
       channel.consume(queue, async (msg) => {
         if (msg !== null) {
+          processing = true
           console.log(`Received ${msg.content.toString()}`);
-          const success = await doPostRequest(JSON.parse(msg.content.toString())); // Perform POST request
-          if (success) {
-            channel.ack(msg); // Acknowledge the receipt of the message only if POST was successful
-          } else {
-            console.error('Failed to process message, not acknowledging.');
-            // Optionally, you could reject the message here
-            // channel.nack(msg);
-          }
+          const _ = await doPostRequest(JSON.parse(msg.content.toString()));
+        }else{
+          processing  = false
         }
-      }, { noAck: false });
+      }, { noAck: true });
 
-      // Check if the queue is empty periodically
+      // Periodically check if the queue is empty
       const checkQueueInterval = setInterval(() => {
         channel.checkQueue(queue, (err, ok) => {
           if (err) {
@@ -73,11 +73,13 @@ export async function message_cron() {
                 console.log('Connection closed');
               });
             });
-          } else {
-            processing = false; // If there are messages, processing should continue
           }
         });
-      }, 10000); // Check every 10 seconds
+      }, 5000); // Check every 5 seconds
     });
   });
+}
+
+export async function message_cron() {
+  connectToRabbitMQ();
 }

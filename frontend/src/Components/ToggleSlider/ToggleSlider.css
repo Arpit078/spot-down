@@ -1,0 +1,60 @@
+.slider-container {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.slider {
+  position: relative;
+  width: 400px; /* Width of the slider */
+  height: 60px; /* Height of the slider */
+  border-radius: 30px;
+  background-color: #ccc; /* Slider background color */
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden; /* Ensure the knob stays within the slider */
+  transition: background-color 0.3s ease;
+}
+
+.slider-knob {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%; /* Knob width */
+  height: 100%;
+  border-radius: 30px;
+  background-color: #007bff; /* Default color for "Search Song" */
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  transform: translateX(0); /* Start position */
+}
+
+.slider-knob.playlist {
+  background-color: #28a745; /* Color for "Search Playlist" */
+  transform: translateX(100%); /* End position */
+}
+
+.slider-text {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+.text {
+  width: 50%;
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+.text.active {
+  color: #fff;
+}
+
+.slider:hover {
+  background-color: #aaa; /* Slightly darker background on hover */
+}

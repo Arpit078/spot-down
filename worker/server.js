@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from "cors";
 import * as dotenv from 'dotenv'; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 import { getSongs } from "./download.js";
 import { zip, getTrackName } from "./utils.js";
@@ -8,19 +9,22 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import cron from 'node-cron';  // Import node-cron
 import { message_cron } from './download_queue.js';
+import { poll } from './utils.js';
+import { redis_client } from './lib/redis_wrapper.js';
+import { postgres_client } from "./lib/postgres_wrapper.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 dotenv.config();
 const app = express();
+app.use(cors()); // Use CORS middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 var PORT = process.env.PORT || 5002;
 
-// Schedule the message_cron function to run every minute
-cron.schedule('* * * * *', () => {
-  console.log('Running message_cron every minute');
+cron.schedule('*/5 * * * * *', () => {
+  console.log('Running message_cron every 5 seconds');
   message_cron();
 });
 
@@ -33,7 +37,7 @@ app.post('/worker/server_download', async (req, res) => {
     let trackArtist = message.artistName;
     let trackImage = message.imageUrl;
     let query = trackName + " by " + trackArtist;
-    await getSongs(query, trackId, trackName, trackArtist, trackImage);
+    await getSongs(query, trackId, trackName, trackArtist, trackImage, postgres_client);
 
     res.status(200).send({ success: true });
   } catch (err) {
@@ -42,7 +46,7 @@ app.post('/worker/server_download', async (req, res) => {
   }
 });
 
-app.get('/worker/client_download', async (req, res) => {
+app.post('/worker/client_download', async (req, res) => {
   try {
     const options = {
       headers: {
@@ -68,7 +72,7 @@ app.get('/worker/client_download', async (req, res) => {
         });
       } catch (error) {
         console.error('Error reading metadata:', error);
-        res.status(500).send('Error reading metadata');
+        res.status(200).send('Song does not exist please download on server first');
       }
     } else {
       const tempDir = path.join(__dirname, `./temp_downloads_${uniqueId}`);
@@ -77,11 +81,13 @@ app.get('/worker/client_download', async (req, res) => {
       try {
         // Copy and rename files
         await Promise.all(listOfIds.map(async (id) => {
-          let trackPath = `./songs/${id}.m4a`;
-          let title = await getTrackName(trackPath);
-          let destPath = path.join(tempDir, `${title}.m4a`);
-          
-          fs.copyFileSync(trackPath, destPath);
+          let songExists = await poll(id,redis_client,postgres_client)
+          if(songExists){
+            let trackPath = `./songs/${id}.m4a`;
+            let title = await getTrackName(trackPath);
+            let destPath = path.join(tempDir, `${title}.m4a`);
+            fs.copyFileSync(trackPath, destPath);
+          }
         }));
 
         // Zip the directory

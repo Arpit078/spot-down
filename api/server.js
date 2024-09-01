@@ -1,8 +1,12 @@
 import express from "express"
+import cors from "cors";
 const app = express()
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config()
 import { getPlaylistTracks,getSearchedTracks,getSpotifyToken } from "./spotify.js";
+
+
+app.use(cors()); // Use CORS middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 import { postgres_client } from "./lib/postgres_wrapper.js";
@@ -12,43 +16,44 @@ import { send_message} from "./lib/rabbitMQ_wrapper.js";
 var PORT = process.env.PORT||5001;
 
 app.get('/api/search', async (req, res) => {
-    try{
-        let query = req.body.query;
-        let token = await getSpotifyToken(redis_client);
-        let data = await getSearchedTracks(query,token);
-        res.status(200).send(data)
-    } catch(err){
+  try {
+      let query = req.query.query;  // Retrieve query from query parameters
+      let token = await getSpotifyToken(redis_client);
+      let data = await getSearchedTracks(query, token);
+      res.status(200).send(data);
+  } catch (err) {
       console.error(err);
-	    res.status(err.response.status).send(err.response.data);
-    }
-})
+      res.status(err.response?.status || 500).send(err.response?.data || 'An error occurred');
+  }
+});
 
 app.get('/api/queryPlaylist', async (req, res) => {
-	try {
-      let playlistId = req.body.playlistUrl.match(/playlist\/(.*?)\?/)[1];
-      console.log(playlistId)
+  try {
+      let playlistUrl = req.query.playlistUrl;  // Retrieve playlistUrl from query parameters
+      let playlistId = playlistUrl.match(/playlist\/(.*?)\?/)[1];
+      console.log(playlistId);
       let token = await getSpotifyToken(redis_client);
-      console.log(`got token ${token}`)
-      let data = await getPlaylistTracks(playlistId,token);
-      console.log("data",data)
-      res.status(200).send(data)
-	} catch (err) {
-	  console.error(err);
-	  res.status(err.response.status).send(err.response.data);
-	}
-  });
-  
-app.get('/api/poll',async (req,res)=>{
-  try{
-    let songId = req.body.songId;
-    let songExists = await poll(songId,redis_client,postgres_client);
-    res.status(200).json({ success: songExists }); 
-
-  }catch(err){
-    console.error(err);
-	  res.status(err.response.status).send(err.response.data);
+      console.log(`got token ${token}`);
+      let data = await getPlaylistTracks(playlistId, token);
+      console.log("data", data);
+      res.status(200).send(data);
+  } catch (err) {
+      console.error(err);
+      res.status(err.response?.status || 500).send(err.response?.data || 'An error occurred');
   }
-})
+});
+
+app.get('/api/poll', async (req, res) => {
+  try {
+      let songId = req.query.songId; // Retrieve songId from query parameters
+      let songExists = await poll(songId, redis_client, postgres_client);
+      res.status(200).json({ success: songExists });
+  } catch (err) {
+      console.error(err);
+      res.status(err.response?.status || 500).send(err.response?.data || 'An error occurred');
+  }
+});
+
 app.post('/api/download', async (req, res) => {
   try {
     let songs = req.body.songs;
