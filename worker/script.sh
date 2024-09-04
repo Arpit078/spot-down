@@ -6,7 +6,7 @@ TrackName=$3
 TrackArtist=$4
 TrackImage=$5
 
-yt-dlp -f 'bestaudio[ext=m4a]' "$YoutubeUrl" -o "songs/$TrackId-old.m4a"
+sudo yt-dlp -f 'bestaudio[ext=m4a]' "$YoutubeUrl" -o "songs/$TrackId-old.m4a"
 
 curl -L -o "songs/$TrackId.png" "$TrackImage"
 
