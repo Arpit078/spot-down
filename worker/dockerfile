@@ -13,12 +13,18 @@ RUN curl -L -o /usr/local/bin/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/l
 # Copy application code
 COPY . .
 
+# Make script.sh executable
+RUN chmod +x script.sh
+
 # Install Node.js dependencies
 RUN npm install
 
 # Expose the port
-ENV PORT 5002
+ENV PORT=5002
 EXPOSE 5002
 
+# Switch back to non-root user
+USER node
+
 # Start cron and your Node.js application
-CMD npm start
+CMD ["npm", "start"]
