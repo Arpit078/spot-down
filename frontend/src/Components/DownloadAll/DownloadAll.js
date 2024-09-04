@@ -7,14 +7,14 @@ function DownloadPlaylist({ isSong, songs }) {
   const [statusChecked, setStatusChecked] = useState(false);
   const [pollStatus, setPollStatus] = useState(null);
   const [downloading, setIsDownloading] = useState(false);
-
+  const hostname = "arpitverma.tech"
   const checkStatus = async () => {
     setLoading(true);
     try {
       let isAllDownloaded = false;
       for(let i=0;i<songs.length;i++){
         let songId = songs[i].id;
-        const response = await fetch(`http://localhost:5001/api/poll?songId=${songId}`);
+        const response = await fetch(`http://${hostname}/api/poll?songId=${songId}`);
         const data = await response.json();
         if (data.success == 0) {
           setButtonText('Request');
@@ -43,7 +43,7 @@ function DownloadPlaylist({ isSong, songs }) {
     setIsDownloading(true);
     setButtonText('Loading...');
     try {
-      const response = await fetch('http://localhost:5001/api/download', {
+      const response = await fetch(`http://${hostname}/api/download`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ function DownloadPlaylist({ isSong, songs }) {
       let isAllDownloaded = false;
       for(let i=0;i<songs.length;i++){
         let songId = songs[i].id;
-        const response = await fetch(`http://localhost:5001/api/poll?songId=${songId}`);
+        const response = await fetch(`http://${hostname}/api/poll?songId=${songId}`);
         const data = await response.json();
         if (data.success == 0) {
           setButtonText('Request');
@@ -109,7 +109,7 @@ function DownloadPlaylist({ isSong, songs }) {
       }
       // Handle Download logic
       try {
-        const response = await fetch('http://localhost:5002/worker/client_download', {
+        const response = await fetch(`http://${hostname}/worker/client_download`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

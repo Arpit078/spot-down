@@ -5,7 +5,7 @@ import Home from "./Pages/Home";
 import SongPage from "./Pages/SearchPage";
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/spotdown">
     <Routes>
         <Route index element={<Home />} />
         <Route path="search" element={<SongPage />} />
@@ -13,6 +13,7 @@ function App() {
         <Route path="*" element={<NoPage />} /> */}
     </Routes>
   </BrowserRouter>
+
   );
 }
 

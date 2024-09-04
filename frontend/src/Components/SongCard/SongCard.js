@@ -7,11 +7,12 @@ function SongCard({ trackName, artistName, imageUrl, songId, isSong }) {
   const [statusChecked, setStatusChecked] = useState(false);
   const [pollStatus, setPollStatus] = useState(null);
   const [downloading, setIsDownloading] = useState(false);
+  const hostname = 'arpitverma.tech'
 
   const checkStatus = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:5001/api/poll?songId=${songId}`);
+      const response = await fetch(`http://${hostname}/api/poll?songId=${songId}`);
       const data = await response.json();
       console.log(data.success);
       setPollStatus(data.success);
@@ -35,7 +36,7 @@ function SongCard({ trackName, artistName, imageUrl, songId, isSong }) {
     setIsDownloading(true);
     setButtonText('Loading...');
     try {
-      const response = await fetch('http://localhost:5001/api/download', {
+      const response = await fetch(`http://${hostname}/api/download`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +63,7 @@ function SongCard({ trackName, artistName, imageUrl, songId, isSong }) {
 
   const pollDownloadStatus = async () => {
     try {
-      const response = await fetch(`http://localhost:5001/api/poll?songId=${songId}`);
+      const response = await fetch(`http://${hostname}/api/poll?songId=${songId}`);
       const data = await response.json();
       console.log('Polling result:', data.success);
       if (data.success == 1) {
@@ -90,7 +91,7 @@ function SongCard({ trackName, artistName, imageUrl, songId, isSong }) {
     } else if (buttonText === 'Download') {
       // Handle Download logic
       try {
-        const response = await fetch('http://localhost:5002/worker/client_download', {
+        const response = await fetch(`http://${hostname}/worker/client_download`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

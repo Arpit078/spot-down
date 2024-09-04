@@ -9,10 +9,10 @@ function SongPage() {
   const location = useLocation();
   const { isSong, query } = location.state || {};
   const [songs, setSongs] = useState([]);
-
+  const hostname = "arpitverma.tech"
   useEffect(() => {
     const fetchSongs = async () => {
-      const response = await fetch(`http://localhost:5001/api/${isSong ? 'search' : 'queryPlaylist'}?query=${query}`);
+      const response = await fetch(`http://${hostname}/api/${isSong ? 'search' : 'queryPlaylist'}?query=${query}`);
       const data = await response.json();
       console.log(data)
       setSongs(data)

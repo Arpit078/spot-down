@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   api:
     build:
@@ -13,7 +11,7 @@ services:
       - "5001:5001"
     depends_on:
       - postgres
-      - redis
+      - redis 
       - rabbitmq
     volumes:
       - ./songs:/app/songs
