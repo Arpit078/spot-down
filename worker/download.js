@@ -11,7 +11,7 @@ export async function download(url, trackId, trackName, trackArtist, trackImage)
     //----------------------------------------------------------------------//
     // trackName = trackName.replace(/ /g, "_");
     // trackArtist = trackArtist.replace(/ /g, "_");
-    const command = `./script.sh "${url}" "${trackId}" "${trackName}" "${trackArtist}" "${trackImage}"`; // change url with videoId if package breaks.
+    const command = `sudo ./script.sh "${url}" "${trackId}" "${trackName}" "${trackArtist}" "${trackImage}"`; // change url with videoId if package breaks.
     console.log(command);
     exec(command, (err, stdout, stderr) => {
       if (err) {
