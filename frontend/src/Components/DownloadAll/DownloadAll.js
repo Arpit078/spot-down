@@ -7,7 +7,7 @@ function DownloadPlaylist({ isSong, songs }) {
   const [statusChecked, setStatusChecked] = useState(false);
   const [pollStatus, setPollStatus] = useState(null);
   const [downloading, setIsDownloading] = useState(false);
-  const hostname = "arpitverma.tech"
+  const hostname = window.location.hostname
   const checkStatus = async () => {
     setLoading(true);
     try {
