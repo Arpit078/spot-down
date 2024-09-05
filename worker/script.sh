@@ -6,23 +6,23 @@ TrackName=$3
 TrackArtist=$4
 TrackImage=$5
 
-yt-dlp -f 'bestaudio[ext=m4a]' "$YoutubeUrl" -o "songs/$TrackId-old.m4a"
+yt-dlp -f 'bestaudio[ext=m4a]' "$YoutubeUrl" -o "/app/songs/$TrackId-old.m4a"
 
-curl -L -o "songs/$TrackId.png" "$TrackImage"
+curl -L -o "/app/songs/$TrackId.png" "$TrackImage"
 
 if [[ $? -eq 0 ]]; then
   echo "Image downloaded successfully."
 
-  ffmpeg -i "songs/$TrackId-old.m4a" -i "songs/$TrackId.png" -map_metadata 0 -map 0 -map 1 -acodec copy -metadata title="$TrackName" -metadata artist="$TrackArtist" "songs/$TrackId.m4a" -y
+  ffmpeg -i "/app/songs/$TrackId-old.m4a" -i "/app/songs/$TrackId.png" -map_metadata 0 -map 0 -map 1 -acodec copy -metadata title="$TrackName" -metadata artist="$TrackArtist" "/app/songs/$TrackId.m4a" -y
   if [[ $? -eq 0 ]]; then
     echo "Cover art set successfully."
 
-    rm "songs/$TrackId.png"
-    rm "songs/$TrackId-old.m4a"
+    rm "/app/songs/$TrackId.png"
+    rm "/app/songs/$TrackId-old.m4a"
 
   else
     echo "Error setting cover art."
-    ffmpeg -i "songs/$TrackId-old.m4a" -i "deafault.png" -map_metadata 0 -map 0 -map 1 -acodec copy -metadata title="$TrackName" -metadata artist="$TrackArtist" "songs/$TrackId.m4a" -y
+    ffmpeg -i "/app/songs/$TrackId-old.m4a" -i "default.png" -map_metadata 0 -map 0 -map 1 -acodec copy -metadata title="$TrackName" -metadata artist="$TrackArtist" "/app/songs/$TrackId.m4a" -y
   fi
 else
   echo "Error downloading image."
